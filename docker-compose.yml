@@ -1,0 +1,82 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  productmgmt:
+    build:
+      context: ./productmgmt
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+      - "3003:3003"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_DATABASE=${POSTGRES_DB}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ordermgmt:
+    build:
+      context: ./ordermgmt
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+      - "3002:3002"
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - PRODUCT_SERVICE_HOST=productmgmt
+      - PRODUCT_SERVICE_PORT=3003
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3000
+    depends_on:
+      - productmgmt
+      - ordermgmt
+
+  db-seeder:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DB_HOST=postgres
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./seed_data.sql:/seed_data.sql
+      - ./init-db.sh:/init-db.sh
+    entrypoint: /bin/sh -c "/init-db.sh"
+    depends_on:
+      productmgmt:
+        condition: service_started
+      ordermgmt:
+        condition: service_started
+
+volumes:
+  postgres_data:
