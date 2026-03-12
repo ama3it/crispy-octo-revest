@@ -122,5 +122,56 @@ npm run dev
 
 ---
 
+## 📡 Available Endpoints
+
+### Product Management Service (Port `3000`)
+
+**Categories (`/categories`)**
+- `GET /categories` - Retrieve all categories
+- `GET /categories/:id` - Retrieve a specific category
+- `POST /categories` - Create a new category
+- `PATCH /categories/:id` - Update a category
+- `DELETE /categories/:id` - Delete a category
+
+**Products (`/products`)**
+- `GET /products` - Retrieve all products
+- `GET /products/:id` - Retrieve a specific product
+- `POST /products` - Create a new product
+- `PATCH /products/:id` - Update a product
+- `DELETE /products/:id` - Delete a product
+- `POST /products/:id/variants` - Add a variant to a product
+- `DELETE /products/:id/variants/:variantId` - Remove a variant from a product
+
+**Inventory (`/inventory`)**
+- `GET /inventory/:sku` - Retrieve inventory by SKU
+- `PATCH /inventory/:id/adjust` - Adjust stock for an inventory item
+- `PATCH /inventory/:id/reserve` - Reserve stock for an inventory item
+
+### Order Management Service (Port `3001`)
+
+**Orders (`/orders`)**
+- `GET /orders` - Retrieve all orders
+- `GET /orders/:id` - Retrieve a specific order
+- `GET /orders/customer/:customerId` - Retrieve orders by customer ID
+- `POST /orders` - Create a new order
+- `PATCH /orders/:id/status` - Update the status of an order
+
+---
+
+## 🧪 Testing the Endpoints
+
+A helper script is included at the root of the project to quickly ping the main GET endpoints and verify that the services are up and running.
+
+1. Make sure the services are running (either via Docker or locally).
+2. Run the test script from the project root:
+
+```bash
+./test-endpoints.sh
+```
+
+This will run a series of simple requests to the `productmgmt` and `ordermgmt` services and output their HTTP status codes.
+
+---
+
 ## Summary
 You can now access the dashboard application at [http://localhost:3004](http://localhost:3004).
