@@ -1,4 +1,30 @@
-# Order Management Project
+# Order & Product Management POC
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Prerequisites](#prerequisites)
+3. [Running with Docker (Recommended)](#-running-with-docker-recommended)
+4. [Running Without Docker](#️-running-without-docker)
+   - [1. Product Management Service](#1-start-the-product-management-service)
+   - [2. Order Management Service](#2-start-the-order-management-service)
+   - [3. Dashboard (Frontend)](#3-start-the-dashboard-frontend)
+   - [4. Database Setup](#4-database-setup)
+5. [Available Endpoints](#-available-endpoints)
+   - [Product Management Service](#product-management-service-port-3000)
+   - [Order Management Service](#order-management-service-port-3001)
+6. [Testing the Endpoints](#-testing-the-endpoints)
+7. [Form Fields Guide](#-form-fields-guide)
+   - [1. Full Name](#1-full-name)
+   - [2. Email](#2-email)
+   - [3. Gender](#3-gender)
+   - [4. Love React?](#4-love-react)
+   - [Adding a New Field](#adding-a-new-field)
+8. [Summary](#summary)
+
+---
+
+## Overview
 
 This project consists of three main services and a PostgreSQL database:
 1. **Product Management Service (productmgmt)** - A NestJS backend service.
@@ -166,6 +192,142 @@ A helper script is included at the root of the project to quickly ping the main 
 ```
 
 This will run a series of simple requests to the `productmgmt` and `ordermgmt` services and output their HTTP status codes.
+
+---
+
+---
+
+## 📝 Form Fields Guide
+
+The dashboard form fields are configured in [`dashboard/src/data/formData.json`](file:///home/amit/code/crispy-octo-revest/dashboard/src/data/formData.json).  
+Each entry in the `data` array represents one form field.
+
+### Index
+
+| # | Field Name | Field Type | Required |
+|---|------------|------------|----------|
+| [1](#1-full-name) | Full Name | TEXT | ✅ |
+| [2](#2-email) | Email | TEXT | ✅ |
+| [3](#3-gender) | Gender | RADIO | ✅ |
+| [4](#4-love-react) | Love React? | LIST | ✅ |
+
+---
+
+#### 1. Full Name
+
+```json
+{
+  "id": 1,
+  "name": "Full Name",
+  "fieldType": "TEXT",
+  "minLength": 1,
+  "maxLength": 100,
+  "defaultValue": "John Doe",
+  "required": true
+}
+```
+
+| Property | Description |
+|----------|-------------|
+| `name` | Label shown in the UI |
+| `fieldType` | `TEXT` renders a plain text input |
+| `minLength` | Minimum number of characters allowed |
+| `maxLength` | Maximum number of characters allowed |
+| `defaultValue` | Pre-filled value when the form loads |
+| `required` | Whether the field must be filled before submission |
+
+---
+
+#### 2. Email
+
+```json
+{
+  "id": 2,
+  "name": "Email",
+  "fieldType": "TEXT",
+  "minLength": 1,
+  "maxLength": 50,
+  "defaultValue": "hello@mail.com",
+  "required": true
+}
+```
+
+| Property | Description |
+|----------|-------------|
+| `name` | Label shown in the UI |
+| `fieldType` | `TEXT` renders a plain text input |
+| `minLength` | Minimum number of characters allowed |
+| `maxLength` | Maximum number of characters allowed |
+| `defaultValue` | Pre-filled email address |
+| `required` | Whether the field must be filled before submission |
+
+---
+
+#### 3. Gender
+
+```json
+{
+  "id": 6,
+  "name": "Gender",
+  "fieldType": "RADIO",
+  "defaultValue": "Male",
+  "required": true,
+  "listOfValues1": ["Male", "Female", "Others"]
+}
+```
+
+| Property | Description |
+|----------|-------------|
+| `name` | Label shown in the UI |
+| `fieldType` | `RADIO` renders a radio-button group |
+| `defaultValue` | Option selected by default |
+| `required` | Whether an option must be chosen |
+| `listOfValues1` | Array of options displayed as radio buttons — add, remove, or rename entries here |
+
+---
+
+#### 4. Love React?
+
+```json
+{
+  "id": 7,
+  "name": "Love React?",
+  "fieldType": "LIST",
+  "defaultValue": "Yes",
+  "required": true,
+  "listOfValues1": ["Yes", "No"]
+}
+```
+
+| Property | Description |
+|----------|-------------|
+| `name` | Label shown in the UI |
+| `fieldType` | `LIST` renders a dropdown/select input |
+| `defaultValue` | Option pre-selected when the form loads |
+| `required` | Whether a selection must be made |
+| `listOfValues1` | Array of dropdown options — add, remove, or rename entries here |
+
+---
+
+### Adding a New Field
+
+Append a new object to the `data` array in `formData.json`:
+
+```json
+{
+  "id": <unique_number>,
+  "name": "Field Label",
+  "fieldType": "TEXT | RADIO | LIST",
+  "minLength": 1,
+  "maxLength": 255,
+  "defaultValue": "default",
+  "required": true,
+  "listOfValues1": []
+}
+```
+
+> **Note:** `listOfValues1` is only required for `RADIO` and `LIST` field types.  
+> `minLength` / `maxLength` apply only to `TEXT` fields.
 
 ---
 
