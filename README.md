@@ -1,4 +1,4 @@
-# Revest Order Management Project
+# Order Management Project
 
 This project consists of three main services and a PostgreSQL database:
 1. **Product Management Service (productmgmt)** - A NestJS backend service.
@@ -8,7 +8,7 @@ This project consists of three main services and a PostgreSQL database:
 
 ## Prerequisites
 - **Docker & Docker Compose** (for running with Docker)
-- **Node.js** (v18 or higher recommended) and **npm** (for running without Docker)
+- **Node.js** (v20 or higher recommended) and **npm** (for running without Docker)
 - **PostgreSQL** (for running without Docker)
 
 ---
@@ -29,7 +29,7 @@ This is the easiest way to run the entire stack.
 3. **Start the containers** using Docker Compose:
 
    ```bash
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
 
    This command will:
@@ -46,7 +46,7 @@ This is the easiest way to run the entire stack.
 
 5. **Stop the containers**:
    ```bash
-   docker-compose down
+   docker compose down
    ```
 
 ---
@@ -55,15 +55,7 @@ This is the easiest way to run the entire stack.
 
 If you prefer to run the services locally on your host machine, follow these steps:
 
-### 1. Database Setup
-Ensure you have PostgreSQL installed and running on default port `5432`.
-1. Create a database and user matching your `.env` credentials (or update `.env` to match your local postgres credentials).
-   - Database Name: `sampledb`
-   - Username: `username`
-   - Password: `password`
-2. Run the `seed_data.sql` file in your database to create the necessary tables and initial data.
-
-### 2. Start the Product Management Service
+### 1. Start the Product Management Service
 Open a new terminal and run the following:
 
 ```bash
@@ -75,16 +67,16 @@ Set the required environment variables (you can create a `.env` file in the `pro
 ```env
 DB_HOST=localhost
 DB_PORT=5432
-DB_USERNAME=astrocipher
-DB_PASSWORD=Nova7812Matrix
-DB_DATABASE=revestdb
+DB_USERNAME=username
+DB_PASSWORD=password
+DB_DATABASE= sampledb
 ```
 ```bash
 npm run start:dev
 ```
 *Service will start on port `3000` (and `3003`).*
 
-### 3. Start the Order Management Service
+### 2. Start the Order Management Service
 Open another terminal:
 
 ```bash
@@ -94,7 +86,7 @@ npm install
 
 Set the required environment variables:
 ```env
-DATABASE_URL=postgres://astrocipher:Nova7812Matrix@localhost:5432/revestdb
+DATABASE_URL=postgres://username:password@localhost:5432/sampledb
 PRODUCT_SERVICE_HOST=localhost
 PRODUCT_SERVICE_PORT=3003
 ```
@@ -103,24 +95,28 @@ npm run start:dev
 ```
 *Service will start on port `3001` (and `3002`).*
 
-### 4. Start the Dashboard (Frontend)
+### 3. Start the Dashboard (Frontend)
 Open a final terminal:
 
 ```bash
 cd dashboard
 npm install
 ```
-
-Set the required environment variable for the API URL:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
-```
+ start the application
 ```bash
 npm run dev
 ```
 *Dashboard will start on port `3004`.*
 
 ---
+
+### 4. Database Setup
+Ensure you have PostgreSQL installed and running on default port `5432`.
+1. Create a database and user matching your `.env` credentials (or update `.env` to match your local postgres credentials).
+   - Database Name: `sampledb`
+   - Username: `username`
+   - Password: `password`
+2. Run the `seed_data.sql` file in your database to create the initial data.
 
 ## 📡 Available Endpoints
 
