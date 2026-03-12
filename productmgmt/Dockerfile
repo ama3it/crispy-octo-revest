@@ -14,6 +14,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/dist ./dist
 
